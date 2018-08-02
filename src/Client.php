@@ -7,6 +7,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
 use Incapsula\Api\IntegrationApi;
 use Incapsula\Api\SitesApi;
+use Incapsula\Api\StatsApi;
 use Incapsula\Credentials\CredentialProvider;
 use Incapsula\Credentials\Credentials;
 
@@ -75,6 +76,14 @@ class Client
         return new SitesApi($this);
     }
 
+    /**
+     * @return StatsApi
+     */
+    public function stats()
+    {
+        return new StatsApi($this);
+    }
+    
     /**
      * @param string $uri
      * @param array  $params
