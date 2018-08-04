@@ -20,7 +20,7 @@ class StatsApi extends AbstractApi
     public function getBandwidthStats($siteId, $startTime, $endTime)
     {
         $time = $this->parseDateTime($startTime, $endTime);
-        $incap_response = $this->client->send('', $this->apiUri, [
+        $incap_response = $this->client->send($this->apiUri, [
             'site_id' => $siteId,
             'time_range' => 'custom',
             'start' => $time['startTimeMili'],
@@ -36,11 +36,13 @@ class StatsApi extends AbstractApi
     public function getCacheStats($siteId, $startTime, $endTime)
     {
         $time = $this->parseDateTime($startTime, $endTime);
-        $incap_response = $this->client->send('', $this->apiUri, [
+        $startMili = $time['startTimeMili'];
+        $endMili = $time['endTimeMili'];
+        $incap_response = $this->client->send($this->apiUri, [
             'site_id' => $siteId,
             'time_range' => 'custom',
-            'start' => $time['startTimeMili'],
-            'end' => $time['endTimeMili'],
+            'start' => $startMili,
+            'end' => $endMili,
             'stats' => 'caching_timeseries',
         ]);
         //$cache['caching_timeseries']['1']['data'] standard caching data
