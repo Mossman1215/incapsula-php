@@ -46,11 +46,11 @@ class StatsApi extends AbstractApi
             'stats' => 'caching_timeseries',
         ]);
         //$cache['caching_timeseries']['1']['data'] standard caching data
-        $incap_data['StandardCache'] = ksort($incap_response['caching_timeseries']['1']['data']);
-
+        $incap_data['StandardCache'] = $incap_response['caching_timeseries']['1']['data'];
+        ksort($incap_data['StandardCache']);
         //$cache['caching_timeseries']['3']['data'] advanced caching data
-        $incap_data['Advanced Cached Bytes'] = ksort($incap_response['caching_timeseries']['3']['data']);
-
+        $incap_data['AdvancedCache'] = $incap_response['caching_timeseries']['3']['data'];
+        ksort($incap_data['AdvancedCache']);
         return $incap_data;
     }
 

@@ -3,10 +3,10 @@
 namespace Incapsula\Command;
 
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 class SiteStatsListCommand extends AbstractCommand
 {
@@ -18,9 +18,13 @@ class SiteStatsListCommand extends AbstractCommand
      * @var string
      */
     protected $statistic;
-
+    /**
+     * @var string
+     */
     protected $startTime;
-    
+    /**
+     * @var string
+     */
     protected $endTime;
 
     protected function configure()
@@ -47,7 +51,7 @@ class SiteStatsListCommand extends AbstractCommand
         parent::initialize($input, $output);
 
         $this->siteId = $input->getArgument('site-id');
-        $this->statistic = $input->getArgument('statistic');
+        $this->statistic = strtolower($input->getArgument('statistic'));
         $this->startTime = $input->getArgument('start');
         $this->endTime = $input->getArgument('end');
     }
@@ -61,21 +65,40 @@ class SiteStatsListCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $api = $this->client->stats();
-        
-        $resp = $api->getBandwidthStats($this->siteId,$this->startTime,$this->endTime);
+        $resp = [];
+        if ('bandwidth'=== $this->statistic) {
+            $resp = $api->getBandwidthStats($this->siteId, $this->startTime, $this->endTime);
 
+            $table = new Table($output);
+            $table->setHeaders(['Time', 'Bandwidth to Origin']);
+            foreach ($resp as $line) {
+                $table->addRow($line);
+            }
+            $table->render();
+
+            return 0;
+        }
+        if ('cache'=== $this->statistic) {
+            $resp = $api->getCacheStats($this->siteId, $this->startTime, $this->endTime);
+            $table = new Table($output);
+            $table->setHeaders(['Time', 'Standard Cache', 'Advanced Cache']);
+            $stdCache = $resp['StandardCache'];
+            $advancedCache = $resp['AdvancedCache'];
+            $entries = array_keys($stdCache);
+            //[i][0] is time
+            //[i][1] is cache value
+            $count = count($entries);
+            for ($i=0; $i<$count;$i++) {
+                $table->addRow([$stdCache[$i][0], $stdCache[$i][1], $advancedCache[$i][1]]);
+            }
+            $table->render();
+            return 0;
+        }
         if (true === $input->getOption('json')) {
             $output->write(json_encode($resp));
 
             return 0;
         }
-
-        $table = new Table($output);
-        $table->setHeaders(['Time', 'bandwidth']);
-        foreach ($resp as $line) {
-            $table->addRow($line);
-        }
-        $table->render();
 
         return 0;
     }
