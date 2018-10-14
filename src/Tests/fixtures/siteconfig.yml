@@ -1,0 +1,128 @@
+---
+site_id: 11111111
+status: fully-configured
+domain: www.example.com
+account_id: 000000
+acceleration_level: advanced
+site_creation_date: 1530760708000
+ips:
+- 192.0.2.137
+dns:
+- dns_record_name: www.example.com
+  set_type_to: CNAME
+  set_data_to:
+  - yyyyyy.x.incapdns.net
+- dns_record_name: example.com
+  set_type_to: A
+  set_data_to:
+  - 192.0.2.134
+  - 192.0.2.135
+original_dns:
+- dns_record_name: example.com
+  set_type_to: A
+  set_data_to:
+  - 192.0.2.44
+- dns_record_name: www.example.com
+  set_type_to: A
+  set_data_to:
+  - 192.0.2.44
+warnings: []
+active: active
+support_all_tls_versions: false
+additionalErrors: []
+display_name: www.example.com
+security:
+  waf:
+    rules:
+    - action: api.threats.action.alert
+      action_text: Alert Only
+      id: api.threats.sql_injection
+      name: SQL Injection
+    - action: api.threats.action.alert
+      action_text: Alert Only
+      id: api.threats.cross_site_scripting
+      name: Cross Site Scripting
+    - action: api.threats.action.alert
+      action_text: Alert Only
+      id: api.threats.illegal_resource_access
+      name: Illegal Resource Access
+    - block_bad_bots: true
+      challenge_suspected_bots: false
+      id: api.threats.bot_access_control
+      name: Bot Access Control
+    - activation_mode: api.threats.ddos.activation_mode.auto
+      activation_mode_text: Auto
+      ddos_traffic_threshold: 1000
+      id: api.threats.ddos
+      name: DDoS
+    - action: api.threats.action.quarantine_url
+      action_text: Auto-Quarantine
+      id: api.threats.backdoor
+      name: Backdoor Protect
+    - action: api.threats.action.alert
+      action_text: Alert Only
+      id: api.threats.remote_file_inclusion
+      name: Remote File Inclusion
+    - action: api.threats.action.disabled
+      action_text: Ignore
+      id: api.threats.customRule
+      name: IncapRules
+sealLocation:
+  id: api.seal_location.none
+  name: 'No seal '
+ssl:
+  origin_server:
+    detected: true
+    detectionStatus: ssl_network_detection_not_run
+  generated_certificate:
+    san: []
+siteDualFactorSettings:
+  enabled: false
+  customAreas: []
+  customAreasExceptions: []
+  allowAllUsers: true
+  shouldSuggestApplicatons: true
+  allowedMedia:
+  - ga
+  - sms
+  shouldSendLoginNotifications: true
+  version: 0
+login_protect:
+  enabled: false
+  specific_users_list: []
+  send_lp_notifications: true
+  allow_all_users: true
+  authentication_methods:
+  - ga
+  - sms
+  urls: []
+  url_patterns: []
+performance_configuration:
+  advanced_caching_rules:
+    never_cache_resources: []
+    always_cache_resources: []
+  acceleration_level: advanced
+  async_validation: true
+  minify_javascript: true
+  minify_css: true
+  minify_static_html: true
+  compress_jpeg: true
+  compress_jepg: true
+  progressive_image_rendering: false
+  aggressive_compression: false
+  compress_png: true
+  on_the_fly_compression: true
+  tcp_pre_pooling: true
+  comply_no_cache: false
+  comply_vary: false
+  use_shortest_caching: false
+  perfer_last_modified: false
+  prefer_last_modified: false
+  disable_client_side_caching: false
+  cache300x: false
+  cache_headers: []
+extended_ddos: 0
+res: 0
+res_message: OK
+debug_info:
+  id-info: '13007'
