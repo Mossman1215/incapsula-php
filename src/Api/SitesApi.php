@@ -7,6 +7,17 @@ class SitesApi extends AbstractApi
     private $apiUri = 'https://my.incapsula.com/api/prov/v1/sites';
 
     /**
+     * @param string $siteId
+     * @param mixed  $tests
+     *
+     * @return array
+     */
+    public function getStatus($siteId, $tests = [])
+    {
+        return $this->client->send(sprintf('%s/status', $this->apiUri), ['site_id' => $siteId]);
+    }
+
+    /**
      * @param int $pageSize
      * @param int $pageNum
      *
