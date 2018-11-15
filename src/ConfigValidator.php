@@ -20,14 +20,14 @@ class ConfigValidator
      * @var array
      */
     private $siteConfig;
-
+    /**
+     * @var string
+     */
+    private $siteID;
     public function __construct(string $siteID, $client)
     {
         $this->client = $client;
-        $siteConf = $this->client->sites()->getStatus($siteID);
-        if (false !== $siteConf) {
-            $this->siteConfig = $siteConf;
-        }
+        $this->siteConfig = [];
     }
 
     /**
@@ -39,7 +39,16 @@ class ConfigValidator
      */
     public function validate(array $config = null)
     {
-        return $this->siteConfig;
+            $siteConf = $this->client->sites()->getStatus($this->siteID);
+        if($config != null){
+            $keys=array_keys($config);
+            sort($keys);
+            foreach($keys as $key){
+                echo $key;
+            }
+            return true;
+        }
+        return $false;
     }
 
     /**
@@ -48,6 +57,11 @@ class ConfigValidator
      */
     public function difference(array $config = null, array $excludedKeys = [])
     {
+        $siteConf = $this->client->sites()->getStatus($this->$siteID);
         return $this->siteConfig;
+    }
+
+    public function setSiteConfig($config){
+        $this->siteConfig = $config;
     }
 }

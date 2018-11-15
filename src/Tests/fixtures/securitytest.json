@@ -1,0 +1,57 @@
+{
+	"security": {
+		"waf": {
+			"rules": [
+				{
+					"action": "api.threats.action.alert",
+					"action_text": "Block",
+					"id": "api.threats.sql_injection",
+					"name": "SQL Injection"
+				},
+				{
+					"action": "api.threats.action.alert",
+					"action_text": "Block",
+					"id": "api.threats.cross_site_scripting",
+					"name": "Cross Site Scripting"
+				},
+				{
+					"action": "api.threats.action.alert",
+					"action_text": "Block",
+					"id": "api.threats.illegal_resource_access",
+					"name": "Illegal Resource Access"
+				},
+				{
+					"block_bad_bots": true,
+					"challenge_suspected_bots": false,
+					"id": "api.threats.bot_access_control",
+					"name": "Bot Access Control"
+				},
+				{
+					"activation_mode": "api.threats.ddos.activation_mode.auto",
+					"activation_mode_text": "Auto",
+					"ddos_traffic_threshold": 1000,
+					"id": "api.threats.ddos",
+					"name": "DDoS"
+				},
+				{
+					"action": "api.threats.action.quarantine_url",
+					"action_text": "Auto-Quarantine",
+					"id": "api.threats.backdoor",
+					"name": "Backdoor Protect"
+				},
+				{
+					"action": "api.threats.action.alert",
+					"action_text": "Block",
+					"id": "api.threats.remote_file_inclusion",
+					"name": "Remote File Inclusion"
+				},
+				{
+					"action": "api.threats.action.disabled",
+					"action_text": "Ignore",
+					"id": "api.threats.customRule",
+					"name": "IncapRules"
+				}
+			]
+		}
+	}
+}
