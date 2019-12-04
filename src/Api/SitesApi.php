@@ -21,12 +21,23 @@ class SitesApi extends AbstractApi
     }
 
     /**
-     * @param array $params
-     *
-     * @return array
+     * @param string domain
+     * @param string siteHost
+     * @param string accountId
+     * @return array sitestatus
      */
-    public function add($params = [])
+    public function add(string $accountId="",string $domain,string $siteHost)
     {
+        $params = [
+            "site_ip" => $siteHost,
+            "domain" => $domain,
+            "send_site_setup_emails" => "false",
+            "force_ssl" => "true"
+        ];
+        #account ID is optional and is used for sub account support where applicable
+        if ($accountId!="") {
+            array_push($params,["account_id" => $accountId]);
+        }
         return $this->client->send(sprintf('%s/add', $this->apiUri), $params);
     }
     /**
