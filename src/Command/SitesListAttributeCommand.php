@@ -4,7 +4,7 @@ namespace Incapsula\Command;
 
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class SitesListAttributeCommand extends AbstractCommand
@@ -15,7 +15,7 @@ class SitesListAttributeCommand extends AbstractCommand
 
         $this
             ->setName('sites:listattribute')
-            ->addOption('attribute',null,InputOption::VALUE_REQUIRED, 'json key to inspect')
+            ->addArgument('attribute',null,InputArgument::REQUIRED, 'json key to inspect')
             ->setDescription('List a config value from all sites')
         ;
     }
@@ -28,7 +28,7 @@ class SitesListAttributeCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $attribute = $input->getOption('attribute');
+        $attribute = $input->getArgument('attribute');
 
         $sites = $this->getSites();
 

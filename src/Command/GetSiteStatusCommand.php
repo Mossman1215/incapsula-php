@@ -6,22 +6,24 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 
-class SubAccountListCommand extends AbstractCommand
+class GetSiteStatusCommand extends AbstractCommand
 {
     /**
      * @var string
      */
-    private $accountName;
+    protected $siteId;
 
     protected function configure()
     {
         parent::configure();
 
         $this
-            ->setName('subaccount:list')
+            ->setName('site:status')
+            ->addArgument('site-id', InputArgument::REQUIRED, "domain name of site")
             ->addOption('json', null, InputOption::VALUE_NONE, 'Output as JSON')
-            ->setDescription('List all sites')
+            ->setDescription('Get Site info')
         ;
     }
 
@@ -32,6 +34,7 @@ class SubAccountListCommand extends AbstractCommand
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         parent::initialize($input, $output);
+        $this->siteId = $input->getArgument('site-id');;
     }
 
     /**
@@ -42,32 +45,14 @@ class SubAccountListCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $api = $this->client->accounts();
-        $subAcc = [];
-        $page = 0;
-
-        while (true) {
-            $resp = $api->list(50, $page);
-            if (empty($resp['resultList'])) {
-                break;
-            }
-            $subAcc = array_merge($subAcc, $resp['resultList']);
-            ++$page;
-        }
+        $api = $this->client->sites();
+        $site = $api->status($this->siteId);
 
         if (true === $input->getOption('json')) {
-            $output->writeln(json_encode($subAcc));
-
+            $output->writeln(json_encode($site));
             return 0;
         }
-
-        $table = new Table($output);
-        $table->setHeaders(['Name', 'AccountID']);
-        foreach ($subAcc as $acc) {
-            $table->addRow([$acc['sub_account_name'], $acc['sub_account_id']]);
-        }
-        $table->render();
-
+        $output->writeln(\var_export($site));
         return 0;
     }
 }

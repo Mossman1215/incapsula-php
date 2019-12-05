@@ -25,7 +25,7 @@ class ListAllCacheRulesCommand extends SitesListCommand
         $rules = $this->getRules();
 
         if (true === $input->getOption('json')) {
-            $output->write(json_encode($rules));
+            $output->writeln(json_encode($rules));
 
             return 0;
         }

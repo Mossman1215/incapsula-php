@@ -67,7 +67,7 @@ class AddSiteCommand extends AbstractCommand
         $sites = $api->add("",$this->domain,$this->hostname);
 
         if (true === $input->getOption('json')) {
-            $output->write(json_encode($sites));
+            $output->writeln(json_encode($sites));
             return 0;
         }
 

@@ -32,7 +32,7 @@ class IntegrationIpsCommand extends AbstractCommand
         $data = array_merge($resp['ipRanges'], $resp['ipv6Ranges']);
 
         if (true === $input->getOption('json')) {
-            $output->write(json_encode($data));
+            $output->writeln(json_encode($data));
 
             return 0;
         }

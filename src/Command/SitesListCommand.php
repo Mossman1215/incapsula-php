@@ -31,7 +31,7 @@ class SitesListCommand extends AbstractCommand
         $sites = $this->getSites();
 
         if (true === $input->getOption('json')) {
-            $output->write(json_encode($sites));
+            $output->writeln(json_encode($sites));
 
             return 0;
         }
