@@ -141,9 +141,37 @@ class SitesApi extends AbstractApi
             'page_num' => $pageNum,
         ]);
     }
+    /**
+     * send request to set cache rule
+     * @param string $rule
+     * @param string $status
+     */
+    public function SetCacheRules($siteId,$rule,$status)
+    {
+        #TODO insert validation here
+        $params["site_id"] = $siteId;
+        $params["param"] = $rule;
+        $params["value"] = $status;
+        return $this->client->send(sprintf('%s/performance/advanced', $this->apiUri), $params);
+    }
+    /**
+     * @param int $siteId   The site ID to add cache rule to
 
-        /**
-     * @param array $params
+     * @throws \Exception
+     *
+     * @return array
+     */
+    public function addProtocolCacheRule($siteId)
+    {
+        return $this->client->send(sprintf('%s/performance/caching-rules/add', $this->apiUri), [
+            'site_id' => $siteId,
+            "name" => "fix incap caching protocol",
+            "action" => "HTTP_CACHE_DIFFERENTIATE_SSL"
+        ]);
+    }
+
+    /**
+     * @param int $siteId   The site ID
      *
      * @return array
      */
@@ -153,5 +181,59 @@ class SitesApi extends AbstractApi
             'site_id' => $siteId,
             'cache_mode' => 'static_only',
         ]);
+    }
+
+    /**
+     * @param int $siteid
+     *
+     * @return array
+     */
+    public function setSecurityRules($siteId)
+    {
+        /**
+         * get json data for request parameters as arrays
+         *  security.json => /api/prov/v1/sites/configure/security
+         * make requests to api and append to a results datastructure
+         */
+        $security_conf = file_get_contents(__DIR__."/../../conf/security.json");
+        if(!$security_conf){
+            #crash saying: "failed to load config
+            \throwException(new Exception("failed to load config at: ".__DIR__."/../../conf/security.json"));
+        }
+        $security_arr = json_decode($security_conf,true);
+        if(!$security_arr){
+            \throwException(new Exception("failed to parse as json at: ".__DIR__."/../../conf/security.json"));
+        }
+        $resultSet = [];
+        foreach ($security_arr as $name => $settings) {
+            sleep(0.1);
+            $settings["site_id"]=$siteId;
+            echo "for $name config".\var_export($settings).PHP_EOL;
+            $result = $this->client->send(sprintf('%s/configure/security', $this->apiUri), array_merge($settings));
+            //if result is ok add to result set
+            $resultSet = array_merge($resultSet,$result);
+        }
+        return $resultSet;
+    }
+    /**
+     * load config from a json file and push to incapsula
+     *
+     * @param int $siteid
+     * @return array
+     */
+    public function addWhitelist($siteId){
+        $xss_conf = file_get_contents(__DIR__."/../../conf/cross-site-whitelist.json");
+        if(!$xss_conf){
+            #crash saying: "failed to load config
+            \throwException(new Exception("failed to load config at: ".__DIR__."/../../conf/cross-site-whitelist.json"));
+        }
+        $xss_conf_arr = json_decode($xss_conf,true);
+        if(!$xss_conf_arr){
+            #crash saying: "failed to load config
+            \throwException(new Exception("failed to parse json at: ".__DIR__."/../../conf/cross-site-whitelist.json"));
+        }
+        $params = \array_merge($xss_conf_arr,['site_id' => $siteId]);
+        echo \var_export($params).PHP_EOL;
+        return $this->client->send(sprintf('%s/configure/whitelists', $this->apiUri), $params);
     }
 }
