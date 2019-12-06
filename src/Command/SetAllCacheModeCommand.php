@@ -17,7 +17,7 @@ class SetAllCacheModeCommand extends SitesListCommand
         $this
             ->setName('sites:setCacheMode')
             ->addOption('json', null, InputOption::VALUE_NONE, 'Output as JSON')
-            ->setDescription('List all cache rules for all sites');
+            ->setDescription('Set cache mode standard for all sites');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
